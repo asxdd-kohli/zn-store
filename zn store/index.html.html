@@ -1,0 +1,1682 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZN STORE — Modern Luxury Collection</title>
+
+  <!-- Google Fonts: Cormorant Garamond (High-Contrast Editorial Serif) & Plus Jakarta Sans (Clean Geometric Sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Configuration & Custom Design Tokens -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            alabaster: '#F8F7F4',
+            charcoal: '#111111',
+            stone: '#E5E2DC',
+            bronze: '#9C8265',
+            bronzeDark: '#7D664D',
+            muted: '#6E6B64'
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif']
+          },
+          letterSpacing: {
+            editorial: '0.22em',
+            wideLabel: '0.14em'
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* ==========================================================================
+       QUIET LUXURY ARCHITECTURAL CSS SYSTEM
+       - Zero border radius enforced strictly for sharp editorial framing
+       - Smooth micro-interactions and image crossfade transitions
+       ========================================================================== */
+    :root {
+      --bg-alabaster: #F8F7F4;
+      --text-charcoal: #111111;
+      --border-stone: #E5E2DC;
+      --accent-bronze: #9C8265;
+    }
+
+    *, *::before, *::after {
+      border-radius: 0px !important;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg-alabaster);
+      color: var(--text-charcoal);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Editorial Button Fill Animation (Left-to-Right Sweep) */
+    .btn-editorial {
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      transition: color 0.45s cubic-bezier(0.19, 1, 0.22, 1), border-color 0.45s ease;
+    }
+
+    .btn-editorial::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-color: #111111;
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 0.45s cubic-bezier(0.19, 1, 0.22, 1);
+      z-index: -1;
+    }
+
+    .btn-editorial:hover::before {
+      transform: scaleX(1);
+    }
+
+    .btn-editorial:hover {
+      color: #F8F7F4;
+      border-color: #111111;
+    }
+
+    /* Light variant for dark hero overlay */
+    .btn-editorial-light::before {
+      background-color: #F8F7F4;
+    }
+
+    .btn-editorial-light:hover {
+      color: #111111;
+      border-color: #F8F7F4;
+    }
+
+    /* Product Card Image Crossfade & Subtle Scale */
+    .product-img-primary,
+    .product-img-secondary {
+      transition: opacity 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  transform 0.95s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .product-card:hover .product-img-primary {
+      opacity: 0;
+      transform: scale(1.03);
+    }
+
+    .product-card:hover .product-img-secondary {
+      opacity: 1;
+      transform: scale(1.03);
+    }
+
+    /* Quick Size Bar Slide-Up Reveal */
+    .quick-size-bar {
+      transform: translateY(100%);
+      opacity: 0;
+      transition: transform 0.38s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.35s ease;
+    }
+
+    .product-card:hover .quick-size-bar,
+    .product-card:focus-within .quick-size-bar {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Subtle Scroll Reveal Animations */
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.85s cubic-bezier(0.19, 1, 0.22, 1),
+                  transform 0.85s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .reveal-up.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Custom Scrollbar for Luxury Feel */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #F8F7F4;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #C7C2B8;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #9C8265;
+    }
+
+    /* Hide scrollbar for clean horizontal tab strips */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Combined polish: touch-friendly quick sizes and visible keyboard focus */
+    :focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; }
+    @media (max-width: 767px) {
+      .quick-size-bar { transform: translateY(0); opacity: 1; }
+      #cart-drawer { max-width: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto !important; }
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+
+  </style>
+</head>
+<body class="bg-alabaster text-charcoal selection:bg-bronze selection:text-alabaster">
+
+  <!-- ========================================================================
+       1. MINIMALIST STICKY HEADER
+       - Transparent with white typography over the Hero section
+       - Smoothly transitions to solid #F8F7F4 with #111111 text on scroll
+       ======================================================================== -->
+  <header id="site-header" class="fixed top-0 left-0 right-0 z-40 transition-all duration-500 text-white border-b border-transparent">
+    <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 h-20 flex items-center justify-between">
+      
+      <!-- Left: Primary Desktop Navigation & Mobile Hamburger -->
+      <div class="flex items-center space-x-6 lg:space-x-8 flex-1">
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" aria-label="Open Navigation Menu" class="lg:hidden p-2 -ml-2 focus:outline-none hover:opacity-70 transition-opacity">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.3" viewBox="0 0 24 24">
+            <path stroke-linecap="square" d="M3 7h18M3 12h18M3 17h12" />
+          </svg>
+        </button>
+
+        <!-- Desktop Links -->
+        <nav class="hidden lg:flex items-center space-x-7 text-[11px] uppercase tracking-wideLabel font-medium">
+          <a href="#collection" data-filter-nav="all" class="nav-link hover:text-bronze transition-colors">New Arrivals</a>
+          <a href="#collection" data-filter-nav="Outerwear" class="nav-link hover:text-bronze transition-colors">Collections</a>
+          <a href="#collection" data-filter-nav="Men" class="nav-link hover:text-bronze transition-colors">Men</a>
+          <a href="#collection" data-filter-nav="Women" class="nav-link hover:text-bronze transition-colors">Women</a>
+          <a href="#atelier" class="hover:text-bronze transition-colors">About</a>
+        </nav>
+      </div>
+
+      <!-- Center: Brand Wordmark (Customizable via BRAND_CONFIG in JS) -->
+      <div class="flex-shrink-0 text-center">
+        <a href="#" id="header-brand-logo" class="font-serif text-xl sm:text-2xl lg:text-[26px] tracking-editorial uppercase font-medium block">
+          ZN STORE
+        </a>
+      </div>
+
+      <!-- Right: Utility Icons (Search, Account, Shopping Bag with Counter) -->
+      <div class="flex items-center justify-end space-x-4 sm:space-x-6 flex-1">
+        <!-- Search Trigger -->
+        <button id="search-toggle-btn" aria-label="Search Collection" class="p-2 hover:text-bronze transition-colors flex items-center space-x-2">
+          <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="1.3" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7" />
+            <path stroke-linecap="square" d="M20 20l-3.5-3.5" />
+          </svg>
+          <span class="hidden xl:inline text-[11px] uppercase tracking-wideLabel">Search</span>
+        </button>
+
+        <!-- Account Trigger -->
+        <button id="account-modal-btn" aria-label="Client Account" class="p-2 hover:text-bronze transition-colors">
+          <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="1.3" viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="3.5" />
+            <path stroke-linecap="square" d="M5 19.5c1.5-3.5 4.2-5 7-5s5.5 1.5 7 5" />
+          </svg>
+        </button>
+
+        <!-- Shopping Bag Trigger -->
+        <button id="cart-toggle-btn" aria-label="Open Shopping Bag" class="p-2 -mr-2 hover:text-bronze transition-colors flex items-center space-x-2 relative">
+          <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="1.3" viewBox="0 0 24 24">
+            <path stroke-linecap="square" d="M5 8h14l-.8 12H5.8L5 8z" />
+            <path stroke-linecap="square" d="M9 8V6a3 3 0 016 0v2" />
+          </svg>
+          <span class="text-[11px] uppercase tracking-wideLabel font-medium">
+            Bag (<span id="header-cart-count">0</span>)
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Expandable Live Search Bar Drawer -->
+    <div id="search-bar-panel" class="hidden bg-alabaster text-charcoal border-t border-b border-stone">
+      <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-5 flex items-center justify-between gap-4">
+        <div class="flex items-center flex-1 gap-3">
+          <svg class="w-4 h-4 text-muted flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7" />
+            <path stroke-linecap="square" d="M20 20l-3.5-3.5" />
+          </svg>
+          <input
+            id="live-search-input"
+            type="text"
+            placeholder="Search silhouettes, cashmere, merino wool, outerwear..."
+            class="w-full bg-transparent text-sm text-charcoal placeholder-muted focus:outline-none tracking-wide"
+          />
+        </div>
+        <div class="flex items-center gap-4">
+          <button id="clear-search-btn" class="hidden text-[11px] uppercase tracking-wideLabel text-muted hover:text-charcoal">Clear</button>
+          <button id="close-search-btn" aria-label="Close Search" class="p-1 text-charcoal hover:text-bronze">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.3" viewBox="0 0 24 24">
+              <path stroke-linecap="square" d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation Drawer -->
+  <div id="mobile-drawer-overlay" class="fixed inset-0 bg-black/50 z-50 hidden opacity-0 transition-opacity duration-300"></div>
+  <aside id="mobile-drawer" class="fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] bg-alabaster text-charcoal z-50 transform -translate-x-full transition-transform duration-500 ease-out flex flex-col justify-between border-r border-stone">
+    <div>
+      <div class="h-20 px-6 flex items-center justify-between border-b border-stone">
+        <span class="font-serif text-lg tracking-editorial uppercase">ZN STORE</span>
+        <button id="close-mobile-menu" aria-label="Close Menu" class="p-2 -mr-2 hover:text-bronze">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.3" viewBox="0 0 24 24">
+            <path stroke-linecap="square" d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
+      </div>
+      <nav class="px-6 py-8 flex flex-col space-y-6 text-xs uppercase tracking-wideLabel font-medium">
+        <a href="#collection" data-filter-nav="all" class="mobile-nav-link hover:text-bronze transition-colors">New Arrivals</a>
+        <a href="#collection" data-filter-nav="Outerwear" class="mobile-nav-link hover:text-bronze transition-colors">Collections — AW26</a>
+        <a href="#collection" data-filter-nav="Men" class="mobile-nav-link hover:text-bronze transition-colors">Men</a>
+        <a href="#collection" data-filter-nav="Women" class="mobile-nav-link hover:text-bronze transition-colors">Women</a>
+        <a href="#atelier" class="mobile-nav-link hover:text-bronze transition-colors">The Maison & Craft</a>
+      </nav>
+    </div>
+    <div class="p-6 border-t border-stone space-y-4">
+      <button id="mobile-account-trigger" class="w-full py-3 border border-charcoal text-[11px] uppercase tracking-wideLabel hover:bg-charcoal hover:text-alabaster transition-colors">
+        Client Account
+      </button>
+      <p class="text-[11px] text-muted tracking-wide">Complimentary Express Courier on orders above Rs. 25,000.</p>
+    </div>
+  </aside>
+
+  <!-- ========================================================================
+       2. FULL-SCREEN EDITORIAL HERO SECTION
+       - 100vh high-fashion editorial banner with subtle dark gradient overlay
+       - High-contrast serif headline & animated sharp-edge CTA button
+       ======================================================================== -->
+  <section id="hero-section" class="relative w-full h-screen min-h-[640px] flex items-end overflow-hidden bg-charcoal">
+    <!-- Full-Bleed Editorial Fashion Background -->
+    <img
+      src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=2200&q=85"
+      onerror="this.src='https://placehold.co/1920x1080/1C1B19/E5E2DC?text=ZN+STORE+AW26'"
+      alt="ZN STORE Autumn Winter Editorial Tailoring"
+      class="absolute inset-0 w-full h-full object-cover object-center scale-[1.01] transition-transform duration-[2500ms]"
+    />
+
+    <!-- Subtle Editorial Dark Overlay for Legibility -->
+    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/35"></div>
+
+    <!-- Hero Content Container -->
+    <div class="relative z-10 w-full max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pb-16 sm:pb-24 lg:pb-28">
+      <div class="max-w-3xl">
+        <p class="text-[11px] sm:text-xs uppercase tracking-editorial text-stone/90 mb-4 font-medium">
+          ZN STORE — Autumn / Winter 2026 Atelier Edit
+        </p>
+        <h1 class="font-serif text-4xl sm:text-6xl lg:text-[68px] text-alabaster font-normal leading-[1.06] tracking-[-0.01em] mb-8">
+          Form follows feeling. A considered wardrobe.
+        </h1>
+        <div class="flex flex-wrap items-center gap-4">
+          <a
+            href="#collection"
+            class="btn-editorial btn-editorial-light inline-flex items-center justify-center px-9 py-4 border border-alabaster text-alabaster text-xs uppercase tracking-wideLabel font-medium"
+          >
+            Explore Collection
+          </a>
+          <a
+            href="#atelier"
+            class="inline-flex items-center px-6 py-4 text-xs uppercase tracking-wideLabel text-stone/90 hover:text-alabaster transition-colors"
+          >
+            Discover Craftsmanship &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       3. FEATURED COLLECTION GRID ("SHOP THE LOOK")
+       - Filter bar with bronze underline active states
+       - 4-column desktop / 2-column tablet / 1-column mobile responsive grid
+       - Hover image crossfade + quick-select size bar + live currency prices
+       ======================================================================== -->
+  <section id="collection" class="py-20 sm:py-28 lg:py-32 max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12">
+    
+    <!-- Section Header & Filter Tabs -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between border-b border-stone pb-8 mb-12 gap-6 reveal-up">
+      <div>
+        <span class="text-[11px] uppercase tracking-editorial text-bronze block mb-2.5 font-medium">
+          Curated Wardrobe
+        </span>
+        <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight text-charcoal">
+          Shop the Look
+        </h2>
+      </div>
+
+      <!-- Category Filter Tabs -->
+      <div id="category-tabs" class="flex items-center space-x-6 sm:space-x-8 overflow-x-auto no-scrollbar pb-1">
+        <button data-category="all" class="filter-tab active text-xs uppercase tracking-wideLabel font-medium pb-2 border-b-2 border-bronze text-charcoal whitespace-nowrap transition-colors">
+          All Pieces (8)
+        </button>
+        <button data-category="Women" class="filter-tab text-xs uppercase tracking-wideLabel font-medium pb-2 border-b-2 border-transparent text-muted hover:text-charcoal whitespace-nowrap transition-colors">
+          Women
+        </button>
+        <button data-category="Men" class="filter-tab text-xs uppercase tracking-wideLabel font-medium pb-2 border-b-2 border-transparent text-muted hover:text-charcoal whitespace-nowrap transition-colors">
+          Men
+        </button>
+        <button data-category="Outerwear" class="filter-tab text-xs uppercase tracking-wideLabel font-medium pb-2 border-b-2 border-transparent text-muted hover:text-charcoal whitespace-nowrap transition-colors">
+          Outerwear
+        </button>
+        <button data-category="Knitwear" class="filter-tab text-xs uppercase tracking-wideLabel font-medium pb-2 border-b-2 border-transparent text-muted hover:text-charcoal whitespace-nowrap transition-colors">
+          Knitwear
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Search / Filter Status Banner (Shown dynamically when filtering) -->
+    <div id="filter-status-bar" class="hidden mb-8 py-3 px-4 bg-stone/40 border border-stone flex items-center justify-between text-xs">
+      <span id="filter-status-text" class="text-charcoal tracking-wide">Showing filtered pieces</span>
+      <button id="reset-filters-btn" class="uppercase tracking-wideLabel text-[11px] text-bronze hover:text-charcoal font-medium">
+        Reset Filters
+      </button>
+    </div>
+
+    <!-- Product Grid Container -->
+    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 lg:gap-x-8 gap-y-14">
+      <!-- Dynamically populated by JavaScript -->
+    </div>
+
+    <!-- Empty State if Search Yields No Matches -->
+    <div id="empty-search-state" class="hidden py-20 text-center border border-stone bg-alabaster">
+      <p class="font-serif text-2xl text-charcoal mb-2">No silhouettes match your inquiry.</p>
+      <p class="text-xs text-muted mb-6">Explore our complete Autumn/Winter 2026 wardrobe.</p>
+      <button id="empty-reset-btn" class="btn-editorial px-8 py-3.5 border border-charcoal text-xs uppercase tracking-wideLabel">
+        View Full Collection
+      </button>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       4. BRAND STORY / CRAFTSMANSHIP BANNER
+       - Asymmetrical split-screen editorial layout
+       - Highlights sustainable European mills, bespoke tailoring & quiet luxury
+       ======================================================================== -->
+  <!-- 4. BRAND STORY / ATELIER -->
+  <section id="atelier" class="border-t border-b border-stone bg-alabaster">
+    <div class="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12">
+      <div class="lg:col-span-7 relative min-h-[420px] sm:min-h-[560px] lg:min-h-[660px] overflow-hidden bg-stone/30">
+        <img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=1600&q=85"
+          onerror="this.src='https://placehold.co/1200x900/E5E2DC/111111?text=ZN+STORE+ATELIER'"
+          alt="Fashion garments arranged in an atelier" loading="lazy"
+          class="w-full h-full object-cover object-center" />
+        <div class="absolute bottom-6 left-6 bg-alabaster/95 px-4 py-2.5 border border-stone">
+          <p class="text-[10px] uppercase tracking-editorial text-charcoal">ZN STORE — The Art of Considered Dressing</p>
+        </div>
+      </div>
+      <div class="lg:col-span-5 px-6 sm:px-12 lg:px-16 py-16 sm:py-20 lg:py-24 flex flex-col justify-center bg-alabaster reveal-up">
+        <span class="text-[11px] uppercase tracking-editorial text-bronze mb-4 font-medium">The ZN Philosophy</span>
+        <h2 class="font-serif text-3xl sm:text-4xl lg:text-[42px] leading-[1.14] text-charcoal font-normal mb-6">Less noise. Better essentials.</h2>
+        <p class="text-sm text-muted leading-relaxed mb-6 font-light">
+          ZN STORE is built around clean silhouettes, thoughtful proportions and versatile pieces. The focus is simple: clothing that feels considered, works across occasions and stays relevant beyond a single season.
+        </p>
+        <p class="text-sm text-muted leading-relaxed mb-8 font-light">
+          Explore the collection, compare details and choose the fit that works for you. Product specifications and material information should always be confirmed against the actual garment before a real launch.
+        </p>
+        <div class="grid grid-cols-2 gap-6 py-6 border-t border-b border-stone mb-8">
+          <div><p class="font-serif text-2xl text-charcoal">01</p><p class="text-[11px] uppercase tracking-wideLabel text-muted mt-1">Thoughtful Design</p></div>
+          <div><p class="font-serif text-2xl text-charcoal">02</p><p class="text-[11px] uppercase tracking-wideLabel text-muted mt-1">Everyday Versatility</p></div>
+        </div>
+        <button id="open-story-modal-btn" class="btn-editorial inline-flex items-center self-start px-8 py-4 border border-charcoal text-xs uppercase tracking-wideLabel font-medium text-charcoal">Read Our Story</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. THE ZN STANDARD — inspired by ZN STORE's values section -->
+  <section class="bg-stone/35 border-b border-stone">
+    <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
+        <div class="reveal-up"><p class="text-[10px] uppercase tracking-editorial text-bronze mb-3">01 / Design</p><h3 class="font-serif text-2xl text-charcoal mb-2">Considered silhouettes</h3><p class="text-xs leading-relaxed text-muted">A focused edit of shapes, layers and proportions, presented with room to explore each piece.</p></div>
+        <div class="reveal-up"><p class="text-[10px] uppercase tracking-editorial text-bronze mb-3">02 / Detail</p><h3 class="font-serif text-2xl text-charcoal mb-2">Details that matter</h3><p class="text-xs leading-relaxed text-muted">Clear product information, fit guidance and care notes help customers make informed choices.</p></div>
+        <div class="reveal-up"><p class="text-[10px] uppercase tracking-editorial text-bronze mb-3">03 / Experience</p><h3 class="font-serif text-2xl text-charcoal mb-2">A smoother experience</h3><p class="text-xs leading-relaxed text-muted">A responsive storefront with useful search, category filters and a simple shopping bag.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       6. LUXURY 4-COLUMN FOOTER
+       - Newsletter ("Join the Private Client List"), Customer Care, The Maison,
+         Social Links & Live Currency Selector
+       ======================================================================== -->
+  <footer class="bg-alabaster text-charcoal pt-20 pb-14">
+    <div class="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12">
+      <p class="text-[10px] text-muted leading-relaxed mb-8">
+        Demo storefront: product details, prices, shipping terms and images are sample content. Confirm and replace them before publishing for a real business.
+      </p>
+      
+      <!-- 4-Column Main Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-10 pb-16 border-b border-stone">
+        
+        <!-- Column 1: Private Client List Newsletter -->
+        <div class="lg:pr-6">
+          <p class="font-serif text-xl tracking-editorial uppercase mb-4">ZN STORE</p>
+          <p class="text-xs uppercase tracking-wideLabel text-bronze font-medium mb-3">
+            Join the Private Client List
+          </p>
+          <p class="text-xs text-muted leading-relaxed mb-6 font-light">
+            Receive priority access to runway capsule releases, private showroom appointments, and seasonal lookbooks.
+          </p>
+          <form id="newsletter-form" class="space-y-3">
+            <div class="flex border border-charcoal bg-transparent">
+              <input
+                id="newsletter-email"
+                type="email"
+                required
+                placeholder="Enter your email address"
+                class="w-full px-3.5 py-3 text-xs bg-transparent text-charcoal placeholder-muted focus:outline-none"
+              />
+              <button
+                type="submit"
+                class="px-5 py-3 bg-charcoal text-alabaster text-[11px] uppercase tracking-wideLabel font-medium hover:bg-bronze transition-colors flex-shrink-0"
+              >
+                Join
+              </button>
+            </div>
+            <p id="newsletter-feedback" class="hidden text-[11px] text-bronze tracking-wide">
+              Welcome to the Private Client List. Your invitation has been registered.
+            </p>
+          </form>
+        </div>
+
+        <!-- Column 2: Customer Care -->
+        <div>
+          <h3 class="text-[11px] uppercase tracking-editorial font-semibold text-charcoal mb-6">
+            Client Services
+          </h3>
+          <ul class="space-y-3.5 text-xs text-muted">
+            <li><button data-info-modal="shipping" class="hover:text-charcoal transition-colors">Complimentary Shipping &amp; Returns</button></li>
+            <li><button data-info-modal="size-guide" class="hover:text-charcoal transition-colors">Tailoring &amp; Size Guide</button></li>
+            <li><button data-info-modal="care" class="hover:text-charcoal transition-colors">Garment Care &amp; Preservation</button></li>
+            <li><button data-info-modal="appointment" class="hover:text-charcoal transition-colors">Book a Private Appointment</button></li>
+            <li><button data-info-modal="contact" class="hover:text-charcoal transition-colors">Contact Client Concierge</button></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: The Maison -->
+        <div>
+          <h3 class="text-[11px] uppercase tracking-editorial font-semibold text-charcoal mb-6">
+            The Maison
+          </h3>
+          <ul class="space-y-3.5 text-xs text-muted">
+            <li><a href="#atelier" class="hover:text-charcoal transition-colors">Atelier &amp; Craftsmanship</a></li>
+            <li><button data-info-modal="sustainability" class="hover:text-charcoal transition-colors">Materials &amp; Care</button></li>
+            <li><a href="#collection" class="hover:text-charcoal transition-colors">Autumn / Winter 2026 Runway</a></li>
+            <li><button data-info-modal="boutiques" class="hover:text-charcoal transition-colors">Store Locations</button></li>
+            <li><button data-info-modal="press" class="hover:text-charcoal transition-colors">Press &amp; Editorial Archive</button></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Social & Currency Selector -->
+        <div class="flex flex-col justify-between">
+          <div>
+            <h3 class="text-[11px] uppercase tracking-editorial font-semibold text-charcoal mb-6">
+              Connect
+            </h3>
+            <ul class="space-y-3.5 text-xs text-muted mb-8">
+              <li><a href="#instagram" onclick="showToast('Add your official Instagram URL in the footer.'); return false;" class="hover:text-charcoal transition-colors">Instagram</a></li>
+              <li><a href="#pinterest" onclick="showToast('Add your official Pinterest URL in the footer.'); return false;" class="hover:text-charcoal transition-colors">Pinterest</a></li>
+              <li><a href="#youtube" onclick="showToast('Add your official video URL in the footer.'); return false;" class="hover:text-charcoal transition-colors">Runway Film (YouTube)</a></li>
+            </ul>
+          </div>
+
+          <!-- Currency Selector -->
+          <div>
+            <label for="currency-selector" class="block text-[10px] uppercase tracking-editorial text-muted mb-2">
+              Shipping Region / Currency
+            </label>
+            <div class="relative">
+              <select
+                id="currency-selector"
+                class="w-full appearance-none border border-stone bg-alabaster px-3.5 py-2.5 text-xs text-charcoal focus:outline-none focus:border-charcoal cursor-pointer"
+              >
+                <option value="PKR" selected>Pakistan (PKR Rs.)</option>
+                <option value="USD">United States (USD $)</option>
+                <option value="AED">United Arab Emirates (AED)</option>
+                <option value="GBP">United Kingdom (GBP £)</option>
+              </select>
+              <span class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-xs text-charcoal">
+                &#9662;
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Legal & Copyright Bar -->
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-muted">
+        <p>&copy; 2026 ZN STORE. All rights reserved.</p>
+        <div class="flex items-center space-x-6">
+          <button data-info-modal="privacy" class="hover:text-charcoal transition-colors">Privacy Policy</button>
+          <button data-info-modal="terms" class="hover:text-charcoal transition-colors">Terms of Sale</button>
+          <button data-info-modal="accessibility" class="hover:text-charcoal transition-colors">Accessibility</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       5A. INTERACTIVE PRODUCT QUICK-VIEW MODAL
+       - Multi-image gallery switcher, size selection, Size Guide tab,
+         Fabric & Care instructions tab, and Add to Bag CTA
+       ======================================================================== -->
+  <div id="quickview-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-[2px]">
+    <div class="bg-alabaster text-charcoal w-full max-w-4xl max-h-[92vh] overflow-y-auto border border-stone relative grid grid-cols-1 md:grid-cols-12">
+      
+      <!-- Close Button -->
+      <button id="close-quickview-btn" aria-label="Close Product Details" class="absolute top-4 right-4 z-20 w-9 h-9 bg-alabaster/90 border border-stone flex items-center justify-center hover:bg-charcoal hover:text-alabaster transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24">
+          <path stroke-linecap="square" d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      </button>
+
+      <!-- Left Column: Product Imagery -->
+      <div class="md:col-span-6 bg-stone/30 flex flex-col">
+        <div class="relative aspect-[3/4] w-full overflow-hidden">
+          <img id="qv-main-image" src="" alt="" class="w-full h-full object-cover object-center transition-opacity duration-300" />
+        </div>
+        <!-- Thumbnail Switcher -->
+        <div class="grid grid-cols-2 border-t border-stone">
+          <button id="qv-thumb-1" class="py-2.5 text-[11px] uppercase tracking-wideLabel border-r border-stone bg-alabaster font-medium text-charcoal">
+            01 / Studio View
+          </button>
+          <button id="qv-thumb-2" class="py-2.5 text-[11px] uppercase tracking-wideLabel bg-stone/30 text-muted hover:text-charcoal">
+            02 / Editorial Look
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Column: Specifications & Actions -->
+      <div class="md:col-span-6 p-6 sm:p-8 lg:p-10 flex flex-col justify-between">
+        <div>
+          <p id="qv-category" class="text-[10px] uppercase tracking-editorial text-bronze mb-2 font-medium">
+            Outerwear
+          </p>
+          <h3 id="qv-title" class="font-serif text-2xl sm:text-3xl text-charcoal font-normal mb-2">
+            Product Title
+          </h3>
+          <p id="qv-price" class="text-base font-medium text-charcoal mb-6">
+            $0
+          </p>
+
+          <p id="qv-description" class="text-xs text-muted leading-relaxed mb-6 font-light">
+            Product editorial description goes here.
+          </p>
+
+          <!-- Size Selection -->
+          <div class="mb-6">
+            <div class="flex items-center justify-between mb-2.5">
+              <span class="text-[11px] uppercase tracking-wideLabel font-medium text-charcoal">Select Size</span>
+              <button id="qv-toggle-sizeguide" class="text-[11px] underline text-muted hover:text-charcoal">
+                Size Guide
+              </button>
+            </div>
+            <div id="qv-size-options" class="grid grid-cols-4 gap-2">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Add to Bag Action -->
+          <button id="qv-add-to-bag" class="btn-editorial w-full py-4 border border-charcoal bg-charcoal text-alabaster text-xs uppercase tracking-wideLabel font-medium mb-6">
+            Add to Bag
+          </button>
+
+          <!-- Editorial Accordion Tabs (Fabric & Care / Size Chart) -->
+          <div class="border-t border-stone divide-y divide-stone">
+            <!-- Fabric & Care -->
+            <div class="py-3.5">
+              <button type="button" class="qv-accordion-btn w-full flex items-center justify-between text-left text-[11px] uppercase tracking-wideLabel font-medium text-charcoal" data-target="qv-care-panel">
+                <span>Composition &amp; Garment Care</span>
+                <span>+</span>
+              </button>
+              <div id="qv-care-panel" class="pt-3 text-xs text-muted space-y-1.5 font-light">
+                <p><strong class="font-medium text-charcoal">Fabric:</strong> <span id="qv-fabric">100% Italian Merino Wool</span></p>
+                <p id="qv-care-text">Specialist dry clean only. Store on a contoured cedar hanger away from direct sunlight.</p>
+              </div>
+            </div>
+
+            <!-- Size Guide Panel -->
+            <div class="py-3.5">
+              <button type="button" class="qv-accordion-btn w-full flex items-center justify-between text-left text-[11px] uppercase tracking-wideLabel font-medium text-charcoal" data-target="qv-size-panel">
+                <span>Atelier Sizing &amp; Fit</span>
+                <span>+</span>
+              </button>
+              <div id="qv-size-panel" class="hidden pt-3 text-xs text-muted font-light">
+                <p class="mb-2">Relaxed architectural silhouette. Take your true size for intended drape.</p>
+                <table class="w-full text-left border border-stone text-[11px]">
+                  <thead class="bg-stone/40 text-charcoal">
+                    <tr>
+                      <th class="p-2 border-r border-stone">Size</th>
+                      <th class="p-2 border-r border-stone">Chest (cm)</th>
+                      <th class="p-2">Shoulder (cm)</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-stone">
+                    <tr><td class="p-2 border-r border-stone">S</td><td class="p-2 border-r border-stone">96</td><td class="p-2">44</td></tr>
+                    <tr><td class="p-2 border-r border-stone">M</td><td class="p-2 border-r border-stone">101</td><td class="p-2">46</td></tr>
+                    <tr><td class="p-2 border-r border-stone">L</td><td class="p-2 border-r border-stone">106</td><td class="p-2">48</td></tr>
+                    <tr><td class="p-2 border-r border-stone">XL</td><td class="p-2 border-r border-stone">112</td><td class="p-2">50</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-[10px] uppercase tracking-wideLabel text-muted pt-4">
+          Complimentary Carbon-Neutral Express Delivery
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       5B. SLIDE-OUT SHOPPING BAG DRAWER
+       - Live subtotal, free shipping progress bar ($500 threshold),
+         quantity controls, item removal & simulated luxury checkout
+       ======================================================================== -->
+  <div id="cart-overlay" class="fixed inset-0 bg-black/50 z-50 hidden opacity-0 transition-opacity duration-300"></div>
+  <aside id="cart-drawer" class="fixed top-0 right-0 bottom-0 w-full max-w-md bg-alabaster text-charcoal z-50 transform translate-x-full transition-transform duration-500 ease-out flex flex-col border-l border-stone">
+    
+    <!-- Drawer Header -->
+    <div class="px-6 py-5 border-b border-stone flex items-center justify-between">
+      <div>
+        <h2 class="font-serif text-2xl font-normal">Shopping Bag</h2>
+        <p class="text-[11px] uppercase tracking-wideLabel text-muted">
+          <span id="drawer-item-count">0</span> Items Selected
+        </p>
+      </div>
+      <button id="close-cart-btn" aria-label="Close Shopping Bag" class="p-2 -mr-2 hover:text-bronze transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.3" viewBox="0 0 24 24">
+          <path stroke-linecap="square" d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Complimentary Express Shipping Progress Bar -->
+    <div class="px-6 py-4 bg-stone/35 border-b border-stone">
+      <p id="shipping-progress-text" class="text-xs text-charcoal mb-2.5 tracking-wide">
+        Add <span class="font-medium">Rs. 25,000</span> more for Complimentary Express Courier.
+      </p>
+      <div class="w-full h-[3px] bg-stone overflow-hidden">
+        <div id="shipping-progress-bar" class="h-full bg-bronze transition-all duration-500" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <!-- Cart Items List -->
+    <div id="cart-items-container" class="flex-1 overflow-y-auto px-6 py-6 divide-y divide-stone">
+      <!-- Populated dynamically -->
+    </div>
+
+    <!-- Drawer Footer: Subtotal & Checkout -->
+    <div id="cart-footer" class="p-6 border-t border-stone bg-alabaster space-y-3">
+      <div class="flex items-center justify-between text-xs text-muted">
+        <span>Complimentary Signature Packaging</span>
+        <span class="uppercase tracking-wideLabel text-charcoal">Included</span>
+      </div>
+      <div class="flex items-center justify-between pt-2 border-t border-stone">
+        <span class="text-xs uppercase tracking-wideLabel font-medium">Estimated Subtotal</span>
+        <span id="cart-subtotal" class="font-serif text-2xl font-medium">Rs. 0</span>
+      </div>
+      <button
+        id="checkout-btn"
+        class="btn-editorial w-full py-4 bg-charcoal text-alabaster border border-charcoal text-xs uppercase tracking-wideLabel font-medium disabled:opacity-40 disabled:pointer-events-none"
+      >
+        Review Order
+      </button>
+      <button
+        id="whatsapp-checkout-btn"
+        class="btn-editorial w-full py-3.5 bg-transparent text-charcoal border border-charcoal text-[11px] uppercase tracking-wideLabel font-medium disabled:opacity-40 disabled:pointer-events-none flex items-center justify-center gap-2"
+      >
+        <span>Order via WhatsApp Concierge</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ========================================================================
+       SECONDARY EDITORIAL MODALS (Brand Story, Account, & Concierge Info)
+       ======================================================================== -->
+  <div id="editorial-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-[2px]">
+    <div class="bg-alabaster text-charcoal w-full max-w-xl p-8 sm:p-10 border border-stone relative">
+      <button id="close-editorial-modal" aria-label="Close Modal" class="absolute top-4 right-4 p-2 hover:text-bronze">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.3" viewBox="0 0 24 24">
+          <path stroke-linecap="square" d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      </button>
+      <p id="em-eyebrow" class="text-[10px] uppercase tracking-editorial text-bronze mb-2 font-medium">ZN STORE</p>
+      <h3 id="em-title" class="font-serif text-3xl text-charcoal font-normal mb-4">Title</h3>
+      <div id="em-body" class="text-xs text-muted leading-relaxed space-y-4 font-light"></div>
+    </div>
+  </div>
+
+  <!-- Minimalist Toast Notification Banner -->
+  <div id="toast-notification" class="fixed bottom-6 right-6 z-50 bg-charcoal text-alabaster border border-bronze/40 px-5 py-3.5 text-xs tracking-wide shadow-lg transform translate-y-20 opacity-0 transition-all duration-400 pointer-events-none">
+    Added to your Shopping Bag.
+  </div>
+
+  <!-- ========================================================================
+       VANILLA JAVASCRIPT APPLICATION LOGIC
+       ======================================================================== -->
+  <script>
+    /**
+     * 1. BRAND & CURRENCY CONFIGURATION
+     * Base pricing is stored in PKR (Pakistani Rupee).
+     */
+    const BRAND_CONFIG = {
+      name: 'ZN STORE',
+      freeShippingThresholdPKR: 25000,
+      whatsappNumber: '' // Add your official WhatsApp Business number before enabling real orders
+    };
+
+    const CURRENCIES = {
+      PKR: { symbol: 'Rs. ', rate: 1, code: 'PKR' },
+      USD: { symbol: '$', rate: 1 / 280, code: 'USD' },
+      AED: { symbol: 'AED ', rate: 3.67 / 280, code: 'AED' },
+      GBP: { symbol: '£', rate: 0.79 / 280, code: 'GBP' }
+    };
+
+    /**
+     * 2. CURATED LUXURY COLLECTION CATALOG (Base Prices in PKR)
+     */
+    const PRODUCTS = [
+      {
+        id: 'zn-01',
+        name: 'Double-Faced Cashmere Overcoat',
+        category: 'Outerwear',
+        gender: 'Women',
+        pricePKR: 48500,
+        fabric: '100% Double-Faced Mongolian Cashmere',
+        care: 'Hand-finished unlined construction. Specialist dry clean only.',
+        description: 'Architectural floor-grazing coat tailored with dropped shoulders, horn button closure, and hand-stitched lapels.',
+        sizes: ['S', 'M', 'L', 'XL'],
+        primaryImg: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=900&q=85',
+        secondaryImg: 'https://images.unsplash.com/photo-1548624313-0396c75e4b1a?auto=format&fit=crop&w=900&q=85'
+      },
+      {
+        id: 'zn-02',
+        name: 'Structured Virgin Wool Blazer',
+        category: 'Outerwear',
+        gender: 'Men',
+        pricePKR: 34500,
+        fabric: '100% Italian Biella Virgin Wool',
+        care: 'Dry clean only. Steam lightly between wears to preserve canvas structure.',
+        description: 'Single-breasted blazer featuring a sharp peak lapel, natural roped shoulder, and tonal cupro lining.',
+        sizes: ['S', 'M', 'L', 'XL'],
+        primaryImg: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=900&q=85',
+        secondaryImg: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=900&q=85'
+      },
+      {
+        id: 'zn-03',
+        name: 'Ribbed Merino Funnel-Neck Knit',
+        category: 'Knitwear',
+        gender: 'Women',
+        pricePKR: 18500,
+        fabric: '100% Extra-Fine Italian Merino Wool',
+        care: 'Cool hand wash or delicate dry clean. Dry flat on a towel.',
+        description: 'Heavyweight 5-gauge fisherman rib knit with elongated cuffs and subtle side-seam slits for effortless layering.',
+        sizes: ['S', 'M', 'L', 'XL'],
+        primaryImg: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=900&q=85',
+        secondaryImg: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=900&q=85'
+      },
+      {
+        id: 'zn-04',
+        name: 'Pleated Wide-Leg Gabardine Trouser',
+        category: 'Men',
+        gender: 'Men',
+        pricePKR: 19800,
+        fabric: '100% Compact Cotton-Wool Gabardine',
+        care: 'Dry clean only. Press along front crease with protective cloth.',
+        description: 'Fluid double-pleated trouser engineered with an extended waistband tab and full-length drape.',
+        sizes: ['S', 'M', 'L', 'XL'],
+        primaryImg: 'https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=900&q=85',
+        secondaryImg: 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?auto=format&fit=crop&w=900&q=85'
+      },
+      {
+        id: 'zn-05',
+        name: 'Draped Mulberry Silk Column Dress',
+        category: 'Women',
+        gender: 'Women',
+        pricePKR: 32000,
+        fabric: '100% Heavyweight 30-Momme Mulberry Silk',
+        care: 'Specialist eco-dry clean only. Do not wring or tumble dry.',
+        description: 'Bias-cut evening column silhouette with an asymmetrical cowl neckline and concealed back zip.',
+        sizes: ['S', 'M', 'L', 'XL'],
+        primaryImg: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=900&q=85',
+        secondaryImg: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=900&q=85'
+      },
+      {
+        id: 'zn-06',
+        name: 'Brushed Alpaca Crewneck Sweater',
+        category: 'Knitwear',
+        gender: 'Men',
+        pricePKR: 21500,
+        fabric: '78% Suri Alpaca, 22% Mulberry Silk',
+        care: 'Specialist dry clean only. Fold carefully; avoid hanging.',
+        description: 'Cloud-soft brushed alpaca knit offering exceptional thermal warmth with featherlight volume.',
+        sizes: ['S', 'M', 'L', 'XL'],
+        primaryImg: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=900&q=85',
+        secondaryImg: 'https://images.unsplash.com/photo-1614975059251-992f11792b9f?auto=format&fit=crop&w=900&q=85'
+      },
+      {
+        id: 'zn-07',
+        name: 'Belted Trench Coat in Waxed Cotton',
+        category: 'Outerwear',
+        gender: 'Women',
+        pricePKR: 41000,
+        fabric: '100% Water-Repellent Cotton Twill',
+        care: 'Wipe clean with damp sponge. Re-proof annually.',
+        description: 'Storm-ready minimalist trench coat featuring raglan sleeves, concealed placket, and tonal leather buckle.',
+        sizes: ['S', 'M', 'L', 'XL'],
+        primaryImg: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=900&q=85',
+        secondaryImg: 'https://images.unsplash.com/photo-1544022613-e87ca75a784a?auto=format&fit=crop&w=900&q=85'
+      },
+      {
+        id: 'zn-08',
+        name: 'Relaxed Poplin Atelier Shirt',
+        category: 'Men',
+        gender: 'Men',
+        pricePKR: 13500,
+        fabric: '100% Long-Staple Egyptian Cotton Poplin',
+        care: 'Machine wash cold gentle cycle. Line dry and warm iron.',
+        description: 'Crisp architectural shirting finished with genuine mother-of-pearl buttons and French seams.',
+        sizes: ['S', 'M', 'L', 'XL'],
+        primaryImg: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=900&q=85',
+        secondaryImg: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=900&q=85'
+      }
+    ];
+
+    /**
+     * 3. APPLICATION STATE
+     */
+    const state = {
+      currency: 'PKR',
+      activeCategory: 'all',
+      searchQuery: '',
+      cart: (() => {
+        try {
+          const saved = JSON.parse(localStorage.getItem('znStoreCart') || '[]');
+          if (!Array.isArray(saved)) return [];
+          return saved.filter((item) =>
+            item &&
+            PRODUCTS.some((product) => product.id === item.productId) &&
+            ['S', 'M', 'L', 'XL'].includes(item.size) &&
+            Number.isInteger(item.qty) && item.qty > 0 && item.qty < 100
+          );
+        } catch (error) {
+          return [];
+        }
+      })(), // Saved in this browser only
+      quickViewProduct: null,
+      quickViewSelectedSize: 'M'
+    };
+
+    /**
+     * 4. UTILITY FORMATTING HELPERS
+     */
+    function formatPrice(amountPKR) {
+      const curr = CURRENCIES[state.currency] || CURRENCIES.PKR;
+      const converted = Math.round(amountPKR * curr.rate);
+      return `${curr.symbol}${converted.toLocaleString()}`;
+    }
+
+    let toastTimeout;
+    function showToast(message) {
+      const toast = document.getElementById('toast-notification');
+      toast.textContent = message;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2800);
+    }
+
+    /**
+     * 5. STICKY HEADER SCROLL TRANSITION
+     */
+    function initStickyHeader() {
+      const header = document.getElementById('site-header');
+      const handleScroll = () => {
+        if (window.scrollY > 40) {
+          header.classList.add('bg-alabaster/95', 'backdrop-blur-md', 'text-charcoal', 'border-stone');
+          header.classList.remove('text-white', 'border-transparent');
+        } else {
+          header.classList.remove('bg-alabaster/95', 'backdrop-blur-md', 'text-charcoal', 'border-stone');
+          header.classList.add('text-white', 'border-transparent');
+        }
+      };
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      handleScroll();
+    }
+
+    /**
+     * 6. RENDER PRODUCT GRID WITH HOVER CROSSFADE & QUICK-SIZE SELECTION
+     */
+    function renderProducts() {
+      const grid = document.getElementById('product-grid');
+      const emptyState = document.getElementById('empty-search-state');
+      const statusBar = document.getElementById('filter-status-bar');
+      const statusText = document.getElementById('filter-status-text');
+
+      const filtered = PRODUCTS.filter((item) => {
+        const matchesCategory =
+          state.activeCategory === 'all' ||
+          item.category === state.activeCategory ||
+          item.gender === state.activeCategory;
+
+        const q = state.searchQuery.trim().toLowerCase();
+        const matchesSearch =
+          !q ||
+          item.name.toLowerCase().includes(q) ||
+          item.fabric.toLowerCase().includes(q) ||
+          item.category.toLowerCase().includes(q);
+
+        return matchesCategory && matchesSearch;
+      });
+
+      // Update status bar visibility
+      if (state.activeCategory !== 'all' || state.searchQuery.trim() !== '') {
+        statusBar.classList.remove('hidden');
+        const catLabel = state.activeCategory === 'all' ? 'All Collections' : state.activeCategory;
+        const searchLabel = state.searchQuery ? ` matching "${state.searchQuery}"` : '';
+        statusText.textContent = `Showing ${filtered.length} piece${filtered.length === 1 ? '' : 's'} in ${catLabel}${searchLabel}`;
+      } else {
+        statusBar.classList.add('hidden');
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+
+      grid.innerHTML = filtered
+        .map(
+          (product) => `
+          <article class="product-card group flex flex-col">
+            <!-- Image Container (3:4 Editorial Ratio) -->
+            <div class="relative aspect-[3/4] w-full overflow-hidden bg-stone/30 mb-4 cursor-pointer" onclick="openQuickView('${product.id}')">
+              <img
+                src="${product.primaryImg}"
+                onerror="this.src='https://placehold.co/600x800/E5E2DC/111111?text=${encodeURIComponent(product.name)}'"
+                alt="${product.name}"
+                loading="lazy"
+                class="product-img-primary absolute inset-0 w-full h-full object-cover object-center opacity-100"
+              />
+              <img
+                src="${product.secondaryImg}"
+                onerror="this.src='https://placehold.co/600x800/D8D3C8/111111?text=Editorial+Detail'"
+                alt="${product.name} Editorial View"
+                loading="lazy"
+                class="product-img-secondary absolute inset-0 w-full h-full object-cover object-center opacity-0"
+              />
+
+              <!-- Subtle Category Tag -->
+              <span class="absolute top-3 left-3 bg-alabaster/90 px-2.5 py-1 text-[9px] uppercase tracking-editorial text-charcoal">
+                ${product.category}
+              </span>
+
+              <!-- Quick-Select Size Bar Overlay -->
+              <div
+                class="quick-size-bar absolute bottom-0 left-0 right-0 bg-alabaster/95 backdrop-blur-sm border-t border-stone px-3 py-2.5"
+                onclick="event.stopPropagation()"
+              >
+                <p class="text-[9px] uppercase tracking-editorial text-muted text-center mb-1.5">
+                  Quick Add — Select Size
+                </p>
+                <div class="grid grid-cols-4 gap-1">
+                  ${product.sizes
+                    .map(
+                      (size) => `
+                    <button
+                      type="button"
+                      onclick="addToCart('${product.id}', '${size}')"
+                      class="py-1.5 text-[11px] font-medium text-charcoal border border-stone hover:bg-charcoal hover:text-alabaster hover:border-charcoal transition-colors"
+                    >
+                      ${size}
+                    </button>
+                  `
+                    )
+                    .join('')}
+                </div>
+              </div>
+            </div>
+
+            <!-- Product Metadata -->
+            <div class="flex flex-col flex-1 justify-between">
+              <div>
+                <div class="flex items-start justify-between gap-3 mb-1">
+                  <h3
+                    onclick="openQuickView('${product.id}')"
+                    class="font-serif text-lg sm:text-[19px] leading-snug text-charcoal hover:text-bronze transition-colors cursor-pointer"
+                  >
+                    ${product.name}
+                  </h3>
+                  <span class="text-xs font-medium text-charcoal whitespace-nowrap pt-1">
+                    ${formatPrice(product.pricePKR)}
+                  </span>
+                </div>
+                <p class="text-[11px] text-muted font-light tracking-wide">
+                  ${product.fabric}
+                </p>
+              </div>
+            </div>
+          </article>
+        `
+        )
+        .join('');
+    }
+
+    /**
+     * 7. QUICK-VIEW MODAL LOGIC
+     */
+    function openQuickView(productId) {
+      const product = PRODUCTS.find((p) => p.id === productId);
+      if (!product) return;
+
+      state.quickViewProduct = product;
+      state.quickViewSelectedSize = 'M';
+
+      document.getElementById('qv-category').textContent = `${product.gender} / ${product.category}`;
+      document.getElementById('qv-title').textContent = product.name;
+      document.getElementById('qv-price').textContent = formatPrice(product.pricePKR);
+      document.getElementById('qv-description').textContent = product.description;
+      document.getElementById('qv-fabric').textContent = product.fabric;
+      document.getElementById('qv-care-text').textContent = product.care;
+
+      const mainImg = document.getElementById('qv-main-image');
+      mainImg.src = product.primaryImg;
+      mainImg.alt = product.name;
+
+      // Reset thumbnail active tabs
+      const t1 = document.getElementById('qv-thumb-1');
+      const t2 = document.getElementById('qv-thumb-2');
+      t1.className = 'py-2.5 text-[11px] uppercase tracking-wideLabel border-r border-stone bg-alabaster font-medium text-charcoal';
+      t2.className = 'py-2.5 text-[11px] uppercase tracking-wideLabel bg-stone/30 text-muted hover:text-charcoal';
+
+      t1.onclick = () => {
+        mainImg.src = product.primaryImg;
+        t1.className = 'py-2.5 text-[11px] uppercase tracking-wideLabel border-r border-stone bg-alabaster font-medium text-charcoal';
+        t2.className = 'py-2.5 text-[11px] uppercase tracking-wideLabel bg-stone/30 text-muted hover:text-charcoal';
+      };
+      t2.onclick = () => {
+        mainImg.src = product.secondaryImg;
+        t2.className = 'py-2.5 text-[11px] uppercase tracking-wideLabel bg-alabaster font-medium text-charcoal';
+        t1.className = 'py-2.5 text-[11px] uppercase tracking-wideLabel border-r border-stone bg-stone/30 text-muted hover:text-charcoal';
+      };
+
+      renderQuickViewSizes();
+
+      const modal = document.getElementById('quickview-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function renderQuickViewSizes() {
+      const container = document.getElementById('qv-size-options');
+      if (!state.quickViewProduct) return;
+
+      container.innerHTML = state.quickViewProduct.sizes
+        .map((size) => {
+          const isSelected = state.quickViewSelectedSize === size;
+          return `
+            <button
+              type="button"
+              onclick="selectQuickViewSize('${size}')"
+              class="py-3 text-xs uppercase tracking-wideLabel border transition-colors ${
+                isSelected
+                  ? 'border-charcoal bg-charcoal text-alabaster font-medium'
+                  : 'border-stone bg-transparent text-charcoal hover:border-charcoal'
+              }"
+            >
+              ${size}
+            </button>
+          `;
+        })
+        .join('');
+    }
+
+    function selectQuickViewSize(size) {
+      state.quickViewSelectedSize = size;
+      renderQuickViewSizes();
+    }
+
+    function closeQuickView() {
+      const modal = document.getElementById('quickview-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    /**
+     * 8. SLIDE-OUT SHOPPING BAG & FREE SHIPPING PROGRESS BAR
+     */
+    function addToCart(productId, size) {
+      const existing = state.cart.find((item) => item.productId === productId && item.size === size);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        state.cart.push({ productId, size, qty: 1 });
+      }
+      updateCartUI();
+      openCartDrawer();
+      const product = PRODUCTS.find((p) => p.id === productId);
+      if (product) {
+        showToast(`${product.name} (${size}) added to your bag.`);
+      }
+    }
+
+    function updateCartQty(productId, size, delta) {
+      const index = state.cart.findIndex((item) => item.productId === productId && item.size === size);
+      if (index === -1) return;
+
+      state.cart[index].qty += delta;
+      if (state.cart[index].qty <= 0) {
+        state.cart.splice(index, 1);
+      }
+      updateCartUI();
+    }
+
+    function removeFromCart(productId, size) {
+      state.cart = state.cart.filter((item) => !(item.productId === productId && item.size === size));
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      try {
+        localStorage.setItem('znStoreCart', JSON.stringify(state.cart));
+      } catch (error) {
+        // Current-session cart still works if browser storage is unavailable.
+      }
+      const container = document.getElementById('cart-items-container');
+      const headerCount = document.getElementById('header-cart-count');
+      const drawerCount = document.getElementById('drawer-item-count');
+      const subtotalEl = document.getElementById('cart-subtotal');
+      const progressText = document.getElementById('shipping-progress-text');
+      const progressBar = document.getElementById('shipping-progress-bar');
+      const checkoutBtn = document.getElementById('checkout-btn');
+      const whatsappBtn = document.getElementById('whatsapp-checkout-btn');
+
+      const totalQty = state.cart.reduce((sum, item) => sum + item.qty, 0);
+      headerCount.textContent = totalQty;
+      drawerCount.textContent = totalQty;
+
+      // Calculate PKR Subtotal
+      let subtotalPKR = 0;
+      state.cart.forEach((item) => {
+        const p = PRODUCTS.find((prod) => prod.id === item.productId);
+        if (p) subtotalPKR += p.pricePKR * item.qty;
+      });
+
+      subtotalEl.textContent = formatPrice(subtotalPKR);
+
+      // Update Complimentary Express Shipping Progress Bar
+      const threshold = BRAND_CONFIG.freeShippingThresholdPKR;
+      const pct = Math.min(100, (subtotalPKR / threshold) * 100);
+      progressBar.style.width = `${pct}%`;
+
+      if (subtotalPKR >= threshold) {
+        progressText.innerHTML = `<span class="text-bronze font-medium">Complimentary Express Courier unlocked.</span>`;
+      } else {
+        const remainingPKR = threshold - subtotalPKR;
+        progressText.innerHTML = `Add <span class="font-medium">${formatPrice(remainingPKR)}</span> more for Complimentary Express Courier.`;
+      }
+
+      if (state.cart.length === 0) {
+        checkoutBtn.disabled = true;
+        whatsappBtn.disabled = true;
+        container.innerHTML = `
+          <div class="h-full flex flex-col items-center justify-center text-center py-16">
+            <p class="font-serif text-2xl text-charcoal mb-2">Your shopping bag is empty.</p>
+            <p class="text-xs text-muted max-w-xs leading-relaxed mb-6 font-light">
+              Explore our Autumn/Winter 2026 tailoring and noble knitwear silhouettes.
+            </p>
+            <button
+              onclick="closeCartDrawer()"
+              class="btn-editorial px-7 py-3 border border-charcoal text-[11px] uppercase tracking-wideLabel font-medium"
+            >
+              Continue Exploring
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      checkoutBtn.disabled = false;
+      whatsappBtn.disabled = false;
+
+      container.innerHTML = state.cart
+        .map((item) => {
+          const p = PRODUCTS.find((prod) => prod.id === item.productId);
+          if (!p) return '';
+          return `
+            <div class="py-5 flex gap-4">
+              <img
+                src="${p.primaryImg}"
+                alt="${p.name}"
+                class="w-20 h-28 object-cover bg-stone/30 flex-shrink-0 border border-stone"
+              />
+              <div class="flex-1 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-start justify-between gap-2">
+                    <h4 class="font-serif text-base text-charcoal leading-snug">${p.name}</h4>
+                    <button
+                      onclick="removeFromCart('${p.id}', '${item.size}')"
+                      aria-label="Remove item"
+                      class="text-[10px] uppercase tracking-wideLabel text-muted hover:text-charcoal"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                  <p class="text-[11px] text-muted mt-0.5">Size: <span class="text-charcoal font-medium">${item.size}</span></p>
+                  <p class="text-xs font-medium text-charcoal mt-1">${formatPrice(p.pricePKR * item.qty)}</p>
+                </div>
+
+                <!-- Quantity Stepper -->
+                <div class="flex items-center border border-stone w-24 mt-2">
+                  <button
+                    onclick="updateCartQty('${p.id}', '${item.size}', -1)"
+                    class="w-8 h-7 flex items-center justify-center text-xs hover:bg-stone/40"
+                  >&minus;</button>
+                  <span class="flex-1 text-center text-xs font-medium">${item.qty}</span>
+                  <button
+                    onclick="updateCartQty('${p.id}', '${item.size}', 1)"
+                    class="w-8 h-7 flex items-center justify-center text-xs hover:bg-stone/40"
+                  >+</button>
+                </div>
+              </div>
+            </div>
+          `;
+        })
+        .join('');
+    }
+
+    function openCartDrawer() {
+      const overlay = document.getElementById('cart-overlay');
+      const drawer = document.getElementById('cart-drawer');
+      overlay.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        overlay.classList.remove('opacity-0');
+        drawer.classList.remove('translate-x-full');
+      });
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCartDrawer() {
+      const overlay = document.getElementById('cart-overlay');
+      const drawer = document.getElementById('cart-drawer');
+      overlay.classList.add('opacity-0');
+      drawer.classList.add('translate-x-full');
+      setTimeout(() => {
+        overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+      }, 450);
+    }
+
+    /**
+     * 9. EDITORIAL INFO MODAL (Brand Story, Account, & Footer Client Services)
+     */
+    const EDITORIAL_CONTENT = {
+      story: {
+        eyebrow: 'Savoir-Faire & Heritage',
+        title: 'The ZN STORE Philosophy',
+        body: `
+          <p>ZN STORE is a fashion storefront concept focused on clean silhouettes, versatile wardrobe pieces and a calm shopping experience.</p>
+          <p>This demo brings together editorial presentation, product discovery and a simple shopping bag. Replace this story with the brand's real history and verified product information before launch.</p>
+        `
+      },
+      account: {
+        eyebrow: 'Private Client Portal',
+        title: 'Client Account',
+        body: `
+          <p class="mb-4">Customer accounts are not connected in this demonstration. A real account area requires secure authentication and a customer database.</p>
+          <p>Please do not enter a real password on this demo storefront.</p>
+        `
+      },
+      shipping: {
+        eyebrow: 'Client Services',
+        title: 'Complimentary Shipping & Returns',
+        body: `
+          <p>The demo currently displays complimentary delivery above Rs. 25,000 as an example threshold. Confirm the actual courier coverage, delivery charges and delivery time before publishing.</p>
+          <p>Replace this section with your real exchange and return policy, including the allowed time window and product conditions.</p>
+        `
+      },
+      'size-guide': {
+        eyebrow: 'Atelier Fit',
+        title: 'Tailoring & Size Guide',
+        body: `
+          <p>ZN STORE silhouettes are engineered with clean architectural lines and subtle ease through the chest and shoulder.</p>
+          <p>If you prefer a closer, tailored fit on outerwear, we recommend selecting one size down. Complimentary sleeve and hem adjustments are available through our Client Concierge.</p>
+        `
+      },
+      care: {
+        eyebrow: 'Preservation',
+        title: 'Garment Care & Longevity',
+        body: `
+          <p>Noble fibers such as Mongolian cashmere and Merino wool naturally self-refresh when aired on a wide cedar hanger for 24 hours between wears.</p>
+          <p>Use a gentle cashmere comb to maintain surface smoothness and entrust tailoring exclusively to specialist eco-dry cleaners.</p>
+        `
+      },
+      appointment: {
+        eyebrow: 'Private Salon',
+        title: 'Book a Private Appointment',
+        body: `
+          <p>Experience the Autumn/Winter 2026 collection in complete privacy via a scheduled showroom fitting or virtual video consultation with a ZN STORE Senior Stylist.</p>
+          <button onclick="closeEditorialModal(); showToast('Demo only — connect a contact form to receive appointment requests.');" class="btn-editorial mt-2 px-6 py-3 border border-charcoal text-xs uppercase tracking-wideLabel text-charcoal font-medium">
+            Request Salon Invitation
+          </button>
+        `
+      },
+      sustainability: {
+        eyebrow: 'Responsibility',
+        title: 'Traceable Mills & Regenerative Fibers',
+        body: `
+          <p>Use this section to publish verified fabric composition, country of origin, supplier and care information for each product.</p>
+          <p>Only publish sustainability, certification or sourcing claims when you can substantiate them with current documentation.</p>
+        `
+      },
+      checkout: {
+        eyebrow: 'Demo Checkout',
+        title: 'Checkout is not connected yet',
+        body: `
+          <p>This storefront currently demonstrates the shopping experience only. It does not process payments, create real orders or store customer details.</p>
+          <p>Before accepting orders, connect a secure checkout provider or an order-management platform, configure delivery and returns, and test the complete order flow.</p>
+          <p>Your shopping bag will remain available while you continue exploring.</p>
+        `
+      }
+    };
+
+    function openEditorialModal(key) {
+      const content = EDITORIAL_CONTENT[key] || {
+        eyebrow: 'ZN STORE',
+        title: 'Client Concierge',
+        body: '<p>Our dedicated Client Services team is available Monday through Saturday, 10:00 AM – 8:00 PM PKT, to assist with sizing, styling, and deliveries.</p>'
+      };
+
+      document.getElementById('em-eyebrow').textContent = content.eyebrow;
+      document.getElementById('em-title').textContent = content.title;
+      document.getElementById('em-body').innerHTML = content.body;
+
+      const modal = document.getElementById('editorial-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeEditorialModal() {
+      const modal = document.getElementById('editorial-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    /**
+     * 10. INITIALIZATION & EVENT LISTENERS
+     */
+    document.addEventListener('DOMContentLoaded', () => {
+      initStickyHeader();
+      renderProducts();
+      updateCartUI();
+
+      // Category Tab Filtering
+      document.querySelectorAll('.filter-tab').forEach((tab) => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.filter-tab').forEach((t) => {
+            t.classList.remove('active', 'border-bronze', 'text-charcoal');
+            t.classList.add('border-transparent', 'text-muted');
+          });
+          tab.classList.add('active', 'border-bronze', 'text-charcoal');
+          tab.classList.remove('border-transparent', 'text-muted');
+
+          state.activeCategory = tab.dataset.category;
+          renderProducts();
+        });
+      });
+
+      // Header & Mobile Navigation Category Shortcuts
+      document.querySelectorAll('[data-filter-nav]').forEach((link) => {
+        link.addEventListener('click', () => {
+          const targetCat = link.dataset.filterNav;
+          state.activeCategory = targetCat;
+          document.querySelectorAll('.filter-tab').forEach((t) => {
+            const match = t.dataset.category === targetCat;
+            t.classList.toggle('active', match);
+            t.classList.toggle('border-bronze', match);
+            t.classList.toggle('text-charcoal', match);
+            t.classList.toggle('border-transparent', !match);
+            t.classList.toggle('text-muted', !match);
+          });
+          renderProducts();
+        });
+      });
+
+      // Live Search Drawer Toggle & Filtering
+      const searchPanel = document.getElementById('search-bar-panel');
+      const searchInput = document.getElementById('live-search-input');
+      const clearSearchBtn = document.getElementById('clear-search-btn');
+
+      document.getElementById('search-toggle-btn').addEventListener('click', () => {
+        searchPanel.classList.toggle('hidden');
+        if (!searchPanel.classList.contains('hidden')) {
+          searchInput.focus();
+        }
+      });
+
+      document.getElementById('close-search-btn').addEventListener('click', () => {
+        searchPanel.classList.add('hidden');
+      });
+
+      searchInput.addEventListener('input', (e) => {
+        state.searchQuery = e.target.value;
+        clearSearchBtn.classList.toggle('hidden', !state.searchQuery);
+        renderProducts();
+        if (state.searchQuery.length === 1) {
+          document.getElementById('collection').scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+
+      clearSearchBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        state.searchQuery = '';
+        clearSearchBtn.classList.add('hidden');
+        renderProducts();
+      });
+
+      // Reset Filters
+      const resetAll = () => {
+        state.activeCategory = 'all';
+        state.searchQuery = '';
+        searchInput.value = '';
+        clearSearchBtn.classList.add('hidden');
+        document.querySelectorAll('.filter-tab').forEach((t) => {
+          const isAll = t.dataset.category === 'all';
+          t.classList.toggle('active', isAll);
+          t.classList.toggle('border-bronze', isAll);
+          t.classList.toggle('text-charcoal', isAll);
+          t.classList.toggle('border-transparent', !isAll);
+          t.classList.toggle('text-muted', !isAll);
+        });
+        renderProducts();
+      };
+
+      document.getElementById('reset-filters-btn').addEventListener('click', resetAll);
+      document.getElementById('empty-reset-btn').addEventListener('click', resetAll);
+
+      // Mobile Navigation Drawer
+      const mobileOverlay = document.getElementById('mobile-drawer-overlay');
+      const mobileDrawer = document.getElementById('mobile-drawer');
+
+      const openMobileMenu = () => {
+        mobileOverlay.classList.remove('hidden');
+        requestAnimationFrame(() => {
+          mobileOverlay.classList.remove('opacity-0');
+          mobileDrawer.classList.remove('-translate-x-full');
+        });
+      };
+
+      const closeMobileMenu = () => {
+        mobileOverlay.classList.add('opacity-0');
+        mobileDrawer.classList.add('-translate-x-full');
+        setTimeout(() => mobileOverlay.classList.add('hidden'), 400);
+      };
+
+      document.getElementById('mobile-menu-btn').addEventListener('click', openMobileMenu);
+      document.getElementById('close-mobile-menu').addEventListener('click', closeMobileMenu);
+      mobileOverlay.addEventListener('click', closeMobileMenu);
+      document.querySelectorAll('.mobile-nav-link').forEach((l) => l.addEventListener('click', closeMobileMenu));
+
+      // Cart Drawer Events
+      document.getElementById('cart-toggle-btn').addEventListener('click', openCartDrawer);
+      document.getElementById('close-cart-btn').addEventListener('click', closeCartDrawer);
+      document.getElementById('cart-overlay').addEventListener('click', closeCartDrawer);
+      document.getElementById('checkout-btn').addEventListener('click', () => {
+        closeCartDrawer();
+        setTimeout(() => openEditorialModal('checkout'), 300);
+      });
+
+      document.getElementById('whatsapp-checkout-btn').addEventListener('click', () => {
+        if (state.cart.length === 0) return;
+        let subtotalPKR = 0;
+        const lines = state.cart.map((item, idx) => {
+          const p = PRODUCTS.find((prod) => prod.id === item.productId);
+          if (!p) return '';
+          subtotalPKR += p.pricePKR * item.qty;
+          return `${idx + 1}. ${p.name} (Size: ${item.size}) x${item.qty} — ${formatPrice(p.pricePKR * item.qty)}`;
+        });
+        const message = encodeURIComponent(
+          `Hello ZN STORE Concierge, I would like to place an order:\n\n${lines.join('\n')}\n\nEstimated Total: ${formatPrice(subtotalPKR)}`
+        );
+        if (!/^\d{10,15}$/.test(BRAND_CONFIG.whatsappNumber)) {
+          showToast('WhatsApp orders are not configured yet. Add the official business number first.');
+          return;
+        }
+        window.open(`https://wa.me/${BRAND_CONFIG.whatsappNumber}?text=${message}`, '_blank', 'noopener,noreferrer');
+      });
+
+      // Quick-View Modal Events
+      document.getElementById('close-quickview-btn').addEventListener('click', closeQuickView);
+      document.getElementById('quickview-modal').addEventListener('click', (e) => {
+        if (e.target.id === 'quickview-modal') closeQuickView();
+      });
+
+      document.getElementById('qv-add-to-bag').addEventListener('click', () => {
+        if (state.quickViewProduct) {
+          addToCart(state.quickViewProduct.id, state.quickViewSelectedSize);
+          closeQuickView();
+        }
+      });
+
+      // Quick-View Accordions
+      document.querySelectorAll('.qv-accordion-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const panel = document.getElementById(btn.dataset.target);
+          const isHidden = panel.classList.contains('hidden');
+          panel.classList.toggle('hidden');
+          btn.querySelector('span:last-child').textContent = isHidden ? '−' : '+';
+        });
+      });
+
+      document.getElementById('qv-toggle-sizeguide').addEventListener('click', () => {
+        const sizePanel = document.getElementById('qv-size-panel');
+        sizePanel.classList.remove('hidden');
+      });
+
+      // Editorial Modals (Story, Account, Footer Links)
+      document.getElementById('open-story-modal-btn').addEventListener('click', () => openEditorialModal('story'));
+      document.getElementById('account-modal-btn').addEventListener('click', () => openEditorialModal('account'));
+      document.getElementById('mobile-account-trigger').addEventListener('click', () => {
+        closeMobileMenu();
+        setTimeout(() => openEditorialModal('account'), 300);
+      });
+
+      document.querySelectorAll('[data-info-modal]').forEach((btn) => {
+        btn.addEventListener('click', () => openEditorialModal(btn.dataset.infoModal));
+      });
+
+      document.getElementById('close-editorial-modal').addEventListener('click', closeEditorialModal);
+      document.getElementById('editorial-modal').addEventListener('click', (e) => {
+        if (e.target.id === 'editorial-modal') closeEditorialModal();
+      });
+
+      // Escape key closes active modals/drawers
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeQuickView();
+          closeCartDrawer();
+          closeEditorialModal();
+          closeMobileMenu();
+        }
+      });
+
+      // Newsletter Subscription
+      document.getElementById('newsletter-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const emailInput = document.getElementById('newsletter-email');
+        if (emailInput.value.trim()) {
+          document.getElementById('newsletter-feedback').textContent =
+          'Demo only — connect an email marketing service before collecting subscriptions.';
+        document.getElementById('newsletter-feedback').classList.remove('hidden');
+          emailInput.value = '';
+          showToast('Demo form only — newsletter service is not connected.');
+        }
+      });
+
+      // Live Currency Selector
+      document.getElementById('currency-selector').addEventListener('change', (e) => {
+        state.currency = e.target.value;
+        renderProducts();
+        updateCartUI();
+        if (state.quickViewProduct) {
+          document.getElementById('qv-price').textContent = formatPrice(state.quickViewProduct.pricePKR);
+        }
+        showToast(`Currency updated to ${state.currency}`);
+      });
+
+      // Scroll Reveal IntersectionObserver
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12 }
+      );
+
+      document.querySelectorAll('.reveal-up').forEach((el) => observer.observe(el));
+    });
+  </script>
+</body>
+</html>
